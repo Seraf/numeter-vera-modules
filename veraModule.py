@@ -7,11 +7,16 @@ import os, sys, json
 from pprint import pprint
 import logging
 
-class VeraModule:
-    "Module generic"
+from modulesGeneric import ModulesGeneric
 
-    def  __init__(self,configParser=None):
-        "Load configuration and start connexion"
+#
+# Vera module
+#
+
+
+class VeraModule(ModulesGeneric):
+
+    def __init__(self, configParser=None):
         self._logger= logging.getLogger(__name__)
         self._logger.info("Plugin Munin start")
         self._configParser=configParser
@@ -104,12 +109,3 @@ class VeraModule:
         "Return plugins info for refresh"
         self._VeraPlugin('config')
         return self._INFOS
-
-if __name__ == "__main__":
-    _logger = logging.getLogger()
-    ch = logging.StreamHandler(stream=sys.stdout)
-    _logger.addHandler(ch)
-    _logger.setLevel(logging.DEBUG)
-    stats = VeraModule(None)
-    print str(stats.getData())
-    print str(stats.getInfo())
