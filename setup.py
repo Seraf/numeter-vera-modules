@@ -24,7 +24,7 @@ from distutils.core import setup
 if __name__ == '__main__':
 
     setup(name='numeter-vera-module',
-          version='0.0.2',
+          version='0.0.3',
           description='Numeter Veras Poller module',
           long_description="""A Vera module for Numeter poller.""",
           author='Julien Syx',

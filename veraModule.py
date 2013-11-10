@@ -3,18 +3,14 @@
 
 import time
 import requests
-import os, sys, json
-#from pprint import pprint
 import logging
-
-from modulesGeneric import ModulesGeneric
 
 #
 # Vera module
 #
 
 
-class VeraModule(ModulesGeneric):
+class VeraModule:
 
     def __init__(self, configParser=None):
         self._logger= logging.getLogger(__name__)
@@ -27,8 +23,8 @@ class VeraModule(ModulesGeneric):
         self._veraData = {}
         self._parsedData = {}
 
-        self._address = '192.168.1.51:3480'
-        self._devices = [{'id':5, 'variables':['CurrentTemperature','CurrentSetpoint']}]
+        self._address = ''
+        self._devices = []
 
         if configParser:
             # Get logfile
@@ -39,7 +35,8 @@ class VeraModule(ModulesGeneric):
             # Get devices
             if self._configParser.has_option('VeraModule', 'devices')\
                 and self._configParser.get('VeraModule', 'devices'):
-                self._devices = json.loads(self._configParser.get('VeraModule', 'devices'))
+                self._logger.info(self._configParser.get('VeraModule', 'devices'))
+                self._devices = eval(self._configParser.get('VeraModule', 'devices'))
 
         # Get the data from Vera
         self._parseVERA()
