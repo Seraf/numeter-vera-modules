@@ -4,7 +4,7 @@
 import time
 import requests
 import os, sys, json
-from pprint import pprint
+#from pprint import pprint
 import logging
 
 from modulesGeneric import ModulesGeneric
@@ -68,7 +68,6 @@ class VeraModule(ModulesGeneric):
         nowTimestamp = "%.0f" % time.mktime(time.strptime(now, '%Y %m %d %H:%M'))
         if mode == 'fetch': # DATAS
             for room, device_list in self._parsedData.items():
-                pprint(device_list)
                 for device_name, device_variables, in device_list.iteritems():
                     self._DATAS.append({
                         'TimeStamp': nowTimestamp,
