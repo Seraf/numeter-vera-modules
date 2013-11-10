@@ -22,7 +22,8 @@ class VeraModule:
         self._veraData = {}
         self._parsedData = {}
 
-        self._address = None
+        self._address = '192.168.1.51:3480'
+        self._devices = [{'id':5, 'variables':['CurrentTemperature','CurrentSetpoint']}]
 
         if configParser:
             # Get logfile
@@ -44,49 +45,50 @@ class VeraModule:
 
         for device in self._veraData['devices']:
             for device_searched in self._devices:
-                if device['id'] == device_searched['id']:
+                if int(device['id']) == device_searched['id']:
                     if not device['room'] in self._parsedData:
-                        self._parsedData[device['room']] = {}
+                        self._parsedData[str(device['room'])] = {}
                     if not device['name'] in self._parsedData[device['room']]:
                         variables = {}
 
                         for variable in device['states']:
                             for variable_searched in device_searched['variables']:
                                 if variable['variable'] == variable_searched:
-                                    variables[variable['variable']] = variable['value']
-                        self._parsedData[device['room']][device['name']] = variables
+                                    variables[str(variable['variable'])] = str(variable['value'])
+                        self._parsedData[str(device['room'])][str(device['name'])] = variables
 
     def _VeraPlugin(self,mode):
         "Vera plugin"
         now = time.strftime("%Y %m %d %H:%M", time.localtime())
         nowTimestamp = "%.0f" % time.mktime(time.strptime(now, '%Y %m %d %H:%M'))
         if mode == 'fetch': # DATAS
-            for room in self._parsedData:
-                for device in room:
+            for room, device_list in self._parsedData.items():
+                pprint(device_list)
+                for device_name, device_variables, in device_list.iteritems():
                     self._DATAS.append({
                         'TimeStamp': nowTimestamp,
-                        'Plugin': device['name'],
-                        'Values': device['variables']
+                        'Plugin': device_name,
+                        'Values': device_variables
                     })
 
             return self._DATAS
 
         else: # INFOS
-            for room in self._parsedData:
-                for device in room:
+            for room, device_list in self._parsedData.items():
+                for device_name, device_variables, in device_list.iteritems():
                     dsInfos = {}
-                    for variable_name,variable_value in device['variables'].items():
+                    for variable_name,variable_value in device_variables.items():
                         dsInfos[variable_name] = {
                             "type": "GAUGE",
                             "id": variable_name,
                             "draw": 'line',
                             "label": variable_name}
                     self._INFOS.append({
-                        'Plugin': device['name'],
+                        'Plugin': device_name,
                         'Describ': '',
                         'Category': 'Vera',
                         'Base': '1000',
-                        'Title': device['name'],
+                        'Title': device_name,
                         'Vlabel': '',
                         'Infos': dsInfos,
                     })
