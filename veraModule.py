@@ -47,12 +47,11 @@ class VeraModule:
 
         for device in self._veraData['devices']:
             for device_searched in self._devices:
-                if int(device['id']) == device_searched['id']:
+                if int(device['id']) == int(device_searched['id']):
                     if not device['room'] in self._parsedData:
                         self._parsedData[str(device['room'])] = {}
-                    if not device['name'] in self._parsedData[device['room']]:
+                    if not device['name'] in self._parsedData[str(device['room'])]:
                         variables = {}
-
                         for variable in device['states']:
                             for variable_searched in device_searched['variables']:
                                 if variable['variable'] == variable_searched:
