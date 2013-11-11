@@ -5,11 +5,10 @@ import time
 import requests
 import logging
 
+
 #
 # Vera module
 #
-
-
 class VeraModule:
 
     def __init__(self, configParser=None):
@@ -23,8 +22,9 @@ class VeraModule:
         self._veraData = {}
         self._parsedData = {}
 
-        self._address = ''
-        self._devices = []
+        self._address = '192.168.1.51:3480'
+
+        self._devices = [{'id':5, 'variables':['CurrentTemperature','CurrentSetpoint']},{'id':'8', 'variables':['CurrentLevel']},{'id':'9','variables':['CurrentLevel']},{'id':'7','variables':['CurrentTemperature']}]
 
         if configParser:
             # Get logfile
@@ -48,13 +48,13 @@ class VeraModule:
         for device in self._veraData['devices']:
             for device_searched in self._devices:
                 if int(device['id']) == int(device_searched['id']):
-                    if not device['room'] in self._parsedData:
+                    if not str(device['room']) in self._parsedData:
                         self._parsedData[str(device['room'])] = {}
                     if not device['name'] in self._parsedData[str(device['room'])]:
                         variables = {}
                         for variable in device['states']:
                             for variable_searched in device_searched['variables']:
-                                if variable['variable'] == variable_searched:
+                                if str(variable['variable']) == variable_searched:
                                     variables[str(variable['variable'])] = str(variable['value'])
                         self._parsedData[str(device['room'])][str(device['name'])] = variables
 
