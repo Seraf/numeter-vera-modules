@@ -35,3 +35,7 @@ Add the configuration section for this module :
     
 The module can graph everything : It's a python list containing dictionnary.
 Add a device ID and variables (in states[]) you want to graph. It will automatically retrieve the name of the device and the value of each variable to display it in a graph.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Seraf/numeter-vera-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
